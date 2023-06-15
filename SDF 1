@@ -1,0 +1,167 @@
+<style>
+    
+    .calculator-container {
+        background-color: #f2f2f2;
+        border-radius: 10px;
+        padding: 30px;
+        margin: 0 auto;
+        max-width: 90%;
+        
+    }
+
+    h1 {
+        font-size: 24px;
+        color: #fff;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+    }
+
+    .form-select {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+    }
+
+    .form-select option {
+        font-weight: bold;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    .input-group label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .input-group input,
+    .input-group select {
+        border: 1px solid #ccc;
+    }
+
+    .result {
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .note {
+        font-size: 14px;
+        color: #555;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .promotion {
+        font-size: 18px;
+        color: #555;
+        margin-top: 20px;
+    }
+
+    hr {
+        border-top: 1px solid #ccc;
+        margin-top: 30px;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="calculator-container">
+    <h1>SDF CALCULATOR</h1>
+    <div class="input-group">
+        <label class="form-label">Duration of Nights</label>
+        <input id="duration" onchange="calculateAmount()" placeholder="Nights" class="form-control" name="duration" type="text" value="7">
+    </div>
+    <div class="input-group">
+        <label class="form-label">Age of Traveller</label>
+        <input id="age" placeholder="Age" onchange="calculateAmount()" class="form-control" name="age" type="text" value="21">
+    </div>
+    <div class="input-group">
+        <label class="form-label">SDF OPTIONS</label>
+        <select id="sdf_options" onchange="calculateAmount()" class="form-select" name="sdf_options">
+            <option value="" selected="selected">Select SDF Options</option>
+            <option value="full">FULL SDF</option>
+            <option value="4n4">4 Nights Paid/4 Nights Free</option>
+            <option value="7n7">7 Nights Paid/7 Nights Free</option>
+            <option value="12n18">12 Nights Paid/18 Nights Free</option>
+        </select>
+    </div>
+    <div class="input-group">
+        <label class="form-label">COUNTRY</label>
+        <select id="country" onchange="calculateAmount()" class="form-select" name="country">
+            <option value="others" selected="selected">Others</option>
+            <option value="india">India</option>
+        </select>
+    </div>
+    <div class="input-group">
+        <label class="form-label">TOTAL SDF</label>
+        <input type="text" id="totalsdf" readonly class="form-control">
+    </div>
+    <div class="result"></div>
+    <div class="note">
+        <p>
+            * Note: This promotion is from 1st of June, 2023 till 31st of December, 2024.<br>
+            ** Guests can choose any of the calculator options, which may have different totals depending on the number of nights selected. Guests have the flexibility to select the option with the lowest SDF calculation for the number of nights they wish to visit.
+        </p>
+    </div>
+</div>
+
+<script>
+    function calculateAmount() {
+        var duration = parseInt(document.getElementById('duration').value);
+        var age = parseInt(document.getElementById('age').value);
+        var sdfOptions = document.getElementById('sdf_options').value;
+        var country = document.getElementById('country').value;
+        var sdfPerDay = 0;
+        var currency = "";
+
+        if (country === 'india') {
+            currency = "INR";
+            if (age >= 12) {
+                sdfPerDay = 1200;
+            } else if (age < 12 && age > 5) {
+                sdfPerDay = 600;
+            } else {
+                sdfPerDay = 0;
+            }
+        } else {
+            currency = "USD";
+            if (age >= 12) {
+                sdfPerDay = 200;
+            } else if (age < 12 && age > 5) {
+                sdfPerDay = 100;
+            } else {
+                sdfPerDay = 0;
+            }
+        }
+
+        var totalSDF = 0;
+        if (sdfOptions === 'full') {
+            totalSDF = sdfPerDay * duration;
+        } else if (sdfOptions === '4n4') {
+            totalSDF = sdfPerDay * 4;
+        } else if (sdfOptions === '7n7') {
+            totalSDF = sdfPerDay * 7;
+        } else if (sdfOptions === '12n18') {
+            totalSDF = sdfPerDay * 12;
+        }
+
+        var result = currency + " " + totalSDF;
+        document.getElementById('totalsdf').value = result;
+        document.querySelector('.result').textContent = result;
+    }
+</script>
